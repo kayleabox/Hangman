@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hangman</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Hangman</h1></header>
+
+    <div id="game">
+    	<p>word: </p>
+        <p>wins: 0</p>
+        <p>letters guesses: </p>
+    </div>
+    <script>
+    var words = ["marble", "obsidian", "quartz", "granite", "basalt", "feldspar", "sedimentary", "igneuos", "metamorphic"];
+    var usedWords = [];
+    var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    
+    var alreadyguessed = [];
+    var wins = 0;
+    var correct = [];
+
+    function reset(){
+    	alreadyguessed = [];
+    	wins = 0;
+    	correct = [];
+    }
+
+
+    //var input = document.onkeyup = function(event) {
+    //var userGuess = event.key;
+
+    function checkWord(compWord) {
+        if (usedWords.includes(compWord) === true) {
+            var used = true;
+        }
+        return used;
+    };
+
+    function getCompWord() {
+
+        var compWord = words[Math.floor(Math.random() * words.length)];
+        var check = checkWord(compWord);
+        if (check === true) {
+            compWord = getCompWord();
+        } else {
+            var guessRemaining = compWord.length;
+            console.log(compWord);
+            usedWords.push(compWord);
+            console.log(usedWords);
+            return compWord;
+        }
+
+    };
+
+    function printBlanks(compWord){
+    	var displayWord = [];
+    	for(i = 0; i < compWord.length; i++){
+    		displayWord.push("_");
+    	}
+    	console.log(displayWord);
+    	return displayWord;
+
+    	var html = "<p>word: " + displayWord + "</p>";
+
+        document.querySelector("#game").innerHTML = html;
+    };
+
+    function checkIndex(correct, compWord){
+    	var indices = [];
+    	for(i = 0; i < compWord.length; i++){
+    		if (compWord[i] === correct){
+    			indices.push(i);
+    		}
+    	}
+    	return indices;
+    };
+
+    function game(compWord, displayWord) {
+        var guessRemaining = compWord.length;
+        document.onkeyup = function(event) {
+            if (guessRemaining > 0) {
+
+                var userGuess = event.key;
+                console.log(userGuess);
+
+                alreadyguessed.push(userGuess);
+                console.log(alreadyguessed);
+                console.log(compWord);
+
+                var match = compWord.search(userGuess);
+                console.log(userGuess);
+                console.log(match);
+
+
+                if (match !== -1) {
+                    wins++;
+                    guessRemaining--;
+                    console.log("yay! " + wins);
+                    var indices = checkIndex(userGuess, compWord);
+                    console.log (indices);
+                    for (i = 0; i<indices.length; i++){
+                    	displayWord[indices[i]] = userGuess;
+                    	console.log(i);
+                	}
+                    correct.push(userGuess);
+                } else {
+                    guessRemaining--;
+                    console.log("try again " + guessRemaining);
+                }
+
+
+                var html = "<p>word: " + displayWord + "</p>" +
+                	"<p>wins: " + wins + "</p>" +
+                    "<p>Guesses Remaining: " + guessRemaining + "</p>" +
+                    "<p>Already Guessed: " + alreadyguessed + "</p>";
+
+                document.querySelector("#game").innerHTML = html;
+            }
+            else{
+            	var html = "<p>play again?</p>";
+
+                document.querySelector("#game").innerHTML = html;
+                //this is not happening at the right time the user is being prompted after the input is already stored
+            	var playing = event.key;
+            	if (playing != 0){
+            		reset();
+            		rungame();
+            	}
+            }
+
+        };
+    };
+
+   	 function rungame(){
+	    var compWord = getCompWord();
+
+	    var displayWord = printBlanks(compWord);
+	 
+	    game(compWord, displayWord);
+	};
+
+	rungame();
+
+    </script>
+</body>
+
+</html>
