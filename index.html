@@ -12,21 +12,25 @@
 
     <div id="game">
     	<p>word: </p>
-        <p>wins: 0</p>
+        <p id="wins">wins: 0</p>
         <p>letters guesses: </p>
     </div>
+
     <script>
-    var words = ["marble", "obsidian", "quartz", "granite", "basalt", "feldspar", "sedimentary", "igneuos", "metamorphic"];
+    var words = ["marble", "obsidian", "quartz", "granite", "basalt", "feldspar", "sedimentary", "igneuos", "metamorphic", "gaboro", "limestone", "shale", "malacite"];
     var usedWords = [];
     var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     
+    //var game = { alreadyguessed: [], wins: 0, correct: []};
     var alreadyguessed = [];
     var wins = 0;
+    var won = false;
     var correct = [];
 
+
     function reset(){
+    	won = false;
     	alreadyguessed = [];
-    	wins = 0;
     	correct = [];
     }
 
@@ -70,6 +74,15 @@
         document.querySelector("#game").innerHTML = html;
     };
 
+    function displayStats(displayWord, wins, guessRemaining, alreadyguessed){
+    	var html = "<p>word: " + displayWord + "</p>" +
+        "<p>wins: " + wins + "</p>" +
+        "<p>Guesses Remaining: " + guessRemaining + "</p>" +
+        "<p>Already Guessed: " + alreadyguessed + "</p>";
+
+        document.querySelector("#game").innerHTML = html;
+    };
+
     function checkIndex(correct, compWord){
     	var indices = [];
     	for(i = 0; i < compWord.length; i++){
@@ -80,16 +93,29 @@
     	return indices;
     };
 
+    function checkWin(compWord, displayWord, wins){
+    	var strdisplayword = displayWord.join("");
+    	var won;
+    	if (compWord === strdisplayword){
+    		//wins++;
+    		//console.log("check wins " + wins);
+    		won = true; 
+    		return won;
+    	}
+    };
+
     function game(compWord, displayWord) {
         var guessRemaining = compWord.length;
         document.onkeyup = function(event) {
-            if (guessRemaining > 0) {
-
+            if (guessRemaining >= 0 && won != true) {
                 var userGuess = event.key;
                 console.log(userGuess);
+                if (alreadyguessed.includes(userGuess) != true){
+                	guessRemaining--;
+                	alreadyguessed.push(userGuess);
+                	console.log(alreadyguessed);//test
+                }
 
-                alreadyguessed.push(userGuess);
-                console.log(alreadyguessed);
                 console.log(compWord);
 
                 var match = compWord.search(userGuess);
@@ -98,8 +124,7 @@
 
 
                 if (match !== -1) {
-                    wins++;
-                    guessRemaining--;
+                    //guessRemaining--;
                     console.log("yay! " + wins);
                     var indices = checkIndex(userGuess, compWord);
                     console.log (indices);
@@ -108,25 +133,48 @@
                     	console.log(i);
                 	}
                     correct.push(userGuess);
-                } else {
-                    guessRemaining--;
+                    //checkWin(compWord, displayWord, wins);
+                    //console.log("wins " + wins);
+                } 
+                else {
+                    //guessRemaining--;
                     console.log("try again " + guessRemaining);
                 }
 
-
-                var html = "<p>word: " + displayWord + "</p>" +
+                won = checkWin(compWord, displayWord, wins);
+                if (won === true){
+                	wins++;
+                }
+ 
+                console.log("this many wins " + wins);
+                displayStats(displayWord, wins, guessRemaining, alreadyguessed);
+                /*var html = "<p>word: " + displayWord + "</p>" +
                 	"<p>wins: " + wins + "</p>" +
                     "<p>Guesses Remaining: " + guessRemaining + "</p>" +
                     "<p>Already Guessed: " + alreadyguessed + "</p>";
 
-                document.querySelector("#game").innerHTML = html;
+                document.querySelector("#game").innerHTML = html;*/
             }
+            /*else if (guessRemaining < 1){
+            	var html = "<p>word: " + displayWord + "</p>" +
+                	"<p>wins: " + wins + "</p>" +
+                    "<p>Guesses Remaining: " + guessRemaining + "</p>" +
+                    "<p>Already Guessed: " + alreadyguessed + "</p>"
+                    "<p>play again?</p>";
+
+                	document.querySelector("#game").innerHTML = html;
+            }*/
             else{
-            	var html = "<p>play again?</p>";
+
+                //this is not happening at the right time the user is being prompted after the input is already stored
+                //checkWin(compWord, displayWord, wins);
+                //console.log("wins " +wins);
+
+
+                var html = "<p>play again?</p>";
 
                 document.querySelector("#game").innerHTML = html;
-                //this is not happening at the right time the user is being prompted after the input is already stored
-            	var playing = event.key;
+            	var playing = prompt("playing?");
             	if (playing != 0){
             		reset();
             		rungame();
@@ -137,14 +185,18 @@
     };
 
    	 function rungame(){
+	    
 	    var compWord = getCompWord();
 
 	    var displayWord = printBlanks(compWord);
 	 
 	    game(compWord, displayWord);
+
+	    //checkWin(compWord, displayWord, wins);
 	};
 
 	rungame();
+
 
     </script>
 </body>
