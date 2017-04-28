@@ -1,7 +1,63 @@
 body{
 	background-color: black;
 	color:white;
+	font-family: 'Hanalei Fill', cursive;
+	/*font-family: 'Pangolin', cursive;
+	font-family: 'Freckle Face', cursive*/
 }
 
-input{
+button{
+	background-color: white;
+	font-family: 'Hanalei Fill', cursive;
+	color: black;
+	border-radius: 5px;
+	border: none;
 }
+
+h1{
+	font-size: 80px;
+	text-align: center;
+}
+
+#rockimgs{
+	float: left;
+	padding-left: 30px;
+	padding-top: 30px;
+
+}
+
+.rockpic{
+	float: left;
+	width: 200px;
+}
+
+#container{
+	width: 550px;
+	height: 500px;
+	margin: auto;
+}
+
+
+#game{
+	color: white;
+	float:right;
+	padding-right: 30px;
+	padding-top: 30px;
+
+}
+
+#win{
+	text-align: center;
+	padding-top: 90px;
+	float:right;
+	padding-right: 100px;
+}
+
+iframe{
+	padding-right: 20px;
+
+}
+
+
+
+
