@@ -2,7 +2,7 @@
 
     document.getElementById("win").style.visibility = "hidden";
 
-    var words = ["marble", "obsidian", "quartz", "granite", "basalt", "feldspar", "sedimentary", "igneous", "metamorphic", "gaboro", "limestone", "shale", "malachite"];
+    var words = ["marble", "obsidian", "quartz", "granite", "basalt", "feldspar", "sedimentary", "igneous", "metamorphic", "gabbro", "limestone", "shale", "malachite"];
     var usedWords = [];
     var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     
@@ -20,7 +20,7 @@
     }
 
 
-    function checkWord(compWord) {
+    /*function checkWord(compWord) {
         if (usedWords.includes(compWord) === true) {
             var used = true;
         }
@@ -30,23 +30,27 @@
         console.log(used);
         console.log(compWord);
         return used;
-    };
+    };*/
 
     function getCompWord() {
 
         var compWord = words[Math.floor(Math.random() * words.length)];
-        var check = checkWord(compWord);
+        /*var check = checkWord(compWord);
         console.log(check);
         if (check === true) {
             compWord = getCompWord();
-        } 
-        else {
+        } */
+        //else {
             //var guessRemaining = compWord.length;
             console.log(compWord);
             usedWords.push(compWord);
-            console.log(usedWords);
+            var index = words.indexOf(compWord);
+            console.log("index" + index)
+            words.splice(index, 1);
+            console.log("usedwords" + usedWords);
+            console.log(words);
             return compWord;
-        }
+        //}
 
     };
 
@@ -98,6 +102,7 @@
     };
 
     function showBtn(){
+        document.getElementById("win").style.visibility = "hidden";
         $(document).on('click','#yes',function(){                   
                 reset();
                 rungame();
