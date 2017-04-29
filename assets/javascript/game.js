@@ -35,23 +35,14 @@
     function getCompWord() {
 
         var compWord = words[Math.floor(Math.random() * words.length)];
-        /*var check = checkWord(compWord);
-        console.log(check);
-        if (check === true) {
-            compWord = getCompWord();
-        } */
-        //else {
-            //var guessRemaining = compWord.length;
             console.log(compWord);
             usedWords.push(compWord);
             var index = words.indexOf(compWord);
             console.log("index" + index)
             words.splice(index, 1);
-            console.log("usedwords" + usedWords);
-            console.log(words);
+            console.log("usedwords= " + usedWords);
+            console.log("words= " + words);
             return compWord;
-        //}
-
     };
 
     function printBlanks(compWord){
@@ -193,6 +184,8 @@
     };
 
    	 function rungame(){
+
+        if(words.length > 0){
 	    
 	    var compWord = getCompWord();
 
@@ -204,7 +197,13 @@
 
 	    displayStats(displayWord, wins, compWord.length, alreadyguessed);
 	 
-	    game(compWord, displayWord);
+	    game(compWord, displayWord);}
+        else{
+            var html = "<p>no more words</p>" + 
+                "<p>thanks for playing!</p>"
+                "<p>you rock!</p>";
+            document.querySelector("#game").innerHTML = html; 
+        }
 
 	};
 
